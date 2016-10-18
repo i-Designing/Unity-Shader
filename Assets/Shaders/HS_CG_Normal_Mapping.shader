@@ -1,4 +1,4 @@
-﻿Shader "Custom/HS_CG_Normal_Mapping" {
+﻿Shader "Custom/HS/HS_CG_Normal_Mapping" {
 	Properties {
       _BumpMap ("Normal Map", 2D) = "bump" {}
       _Color ("Diffuse Material Color", Color) = (1,1,1,1) 

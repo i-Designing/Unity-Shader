@@ -1,4 +1,4 @@
-﻿Shader "Custom/HS_CG_Specular_Highlight" {
+﻿Shader "Custom/HS/HS_CG_Specular_Highlight" {
    Properties {
       _Color ("Diffuse Material Color", Color) = (1,1,1,1) 
       _SpecColor ("Specular Material Color", Color) = (1,1,1,1) 

@@ -1,4 +1,4 @@
-﻿Shader "Custom/HS_Discard" {
+﻿Shader "Custom/HS/HS_Discard" {
 	SubShader {
       Pass {
          Cull Off // turn off triangle culling, alternatives are:

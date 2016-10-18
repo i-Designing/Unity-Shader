@@ -1,4 +1,4 @@
-﻿Shader "Custom/HS_CG_Parallax_Mapping" {
+﻿Shader "Custom/HS/HS_CG_Parallax_Mapping" {
 	Properties {
       _BumpMap ("Normal Map", 2D) = "bump" {}
       _ParallaxMap ("Heightmap (in A)", 2D) = "black" {}

@@ -1,4 +1,4 @@
-﻿Shader "Custom/HS_CG_Glossy_Texture" {
+﻿Shader "Custom/HS/HS_CG_Glossy_Texture" {
 	Properties {
       _MainTex ("RGBA Texture For Material Color", 2D) = "white" {} 
       _Color ("Diffuse Material Color", Color) = (1,1,1,1) 

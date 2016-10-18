@@ -1,4 +1,4 @@
-﻿Shader "Custom/HS_CG_Diffuse_Multiple" {
+﻿Shader "Custom/HS/HS_CG_Diffuse_Multiple" {
    Properties {
       _Color ("Diffuse Material Color", Color) = (1,1,1,1) 
    }

@@ -1,4 +1,4 @@
-﻿Shader "Custom/HS_Discard_Pass" {
+﻿Shader "Custom/HS/HS_Discard_Pass" {
 	SubShader {
 
       // first pass (is executed before the second pass)

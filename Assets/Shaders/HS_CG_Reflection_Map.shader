@@ -1,4 +1,4 @@
-﻿Shader "Custom/HS_CG_Reflection_Map" {
+﻿Shader "Custom/HS/HS_CG_Reflection_Map" {
 	Properties {
       _Cube("Reflection Map", Cube) = "" {}
     }

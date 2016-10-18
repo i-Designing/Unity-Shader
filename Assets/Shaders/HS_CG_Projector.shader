@@ -1,4 +1,4 @@
-﻿Shader "Custom/HS_CG_Projector" {
+﻿Shader "Custom/HS/HS_CG_Projector" {
 	Properties {
       _ShadowTex ("Projected Image", 2D) = "white" {}
     }

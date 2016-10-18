@@ -1,4 +1,4 @@
-﻿Shader "Custom/HS_Blending" {
+﻿Shader "Custom/HS/HS_Blending" {
 	SubShader {
       Tags { "Queue" = "Transparent" } 
          // draw after all opaque geometry has been drawn

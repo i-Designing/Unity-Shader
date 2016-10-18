@@ -1,4 +1,4 @@
-﻿Shader "Custom/HS_CG_Lighting_With_Texture" {
+﻿Shader "Custom/HS/HS_CG_Lighting_With_Texture" {
 	Properties {
       _MainTex ("Texture For Diffuse Material Color", 2D) = "white" {} 
       _Color ("Overall Diffuse Color Filter", Color) = (1,1,1,1)

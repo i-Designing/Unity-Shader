@@ -1,4 +1,4 @@
-﻿Shader "Custom/HS_Blending_WithFace" {
+﻿Shader "Custom/HS/HS_Blending_WithFace" {
 	SubShader {
       Tags { "Queue" = "Transparent" } 
          // draw after all opaque geometry has been drawn
