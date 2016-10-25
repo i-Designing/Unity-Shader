@@ -5,7 +5,8 @@
 		_Factor("Factor",range(0,1))=0.5 //挤出多远
 	}
 
-	SubShader {
+	SubShader 
+	{
 		//挤出操作在第一个pass中进行
 		pass
 		{
@@ -35,7 +36,6 @@
 				float3 dir=normalize(v.vertex.xyz);
 				//计算法线方向
 				float3 dir2=v.normal;
-
 				//计算该点位置朝向和法线方向的点积，通过正负值可以确定是指向还是背离几何中心的，正为背离，负为指向
 				float D=dot(dir,dir2);
 				//乘上正负值，真正的方向值
@@ -56,6 +56,7 @@
 			ENDCG
 		}
 
+		//平行光的的pass渲染
 		pass
 		{
 			Tags{"LightMode"="ForwardBase"}
@@ -81,6 +82,7 @@
 
 			v2f vert (appdata_full v) {
 				v2f o;
+				//切换到世界坐标
 				o.pos=mul(UNITY_MATRIX_MVP,v.vertex);
 				o.normal=v.normal;
 				o.lightDir=ObjSpaceLightDir(v.vertex);
@@ -95,9 +97,13 @@
 				float3 N=normalize(i.normal);
 				float3 viewDir=normalize(i.viewDir);
 				float3 lightDir=normalize(i.lightDir);
+				//求出正常的漫反射颜色
 				float diff=max(0,dot(N,i.lightDir));
+				//做亮化处理
 				diff=(diff+1)/2;
+				//使颜色平滑的在[0,1]范围之内
 				diff=smoothstep(0,1,diff);
+				//把最终颜色混合
 				c=_Color*_LightColor0*(diff);
 				return c;
 			}
