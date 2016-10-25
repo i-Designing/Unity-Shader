@@ -1,4 +1,4 @@
-﻿Shader "Custom/HS/HS_River_GRP_Shader" {
+﻿Shader "Custom/HS/HS_Surf_RiverGRP" {
 	Properties {
 		_MainTex ("Base (RGB)", 2D) = "white" {}
 		// Add two properties  

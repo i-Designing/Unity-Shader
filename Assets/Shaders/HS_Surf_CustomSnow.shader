@@ -1,4 +1,4 @@
-﻿Shader "Custom/HS/HS_Custom_Snow" {
+﻿Shader "Custom/HS/HS_Surf_CustomSnow" {
     Properties {
         _MainTex ("Base (RGB)", 2D) = "white" {}
  
