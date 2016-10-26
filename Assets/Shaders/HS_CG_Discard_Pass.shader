@@ -1,83 +1,95 @@
-﻿Shader "Custom/HS/HS_CG_Discard_Pass" {
-	SubShader {
+﻿Shader "Custom/HS/HS_CG_Discard_Pass"
+{
+	SubShader
+	{
+		// first pass (is executed before the second pass)
+		Pass
+		{
+			Cull Front // cull only front faces
+ 
+			CGPROGRAM 
+ 
+			#pragma vertex vert  
+			#pragma fragment frag 
+ 
+			struct vertexInput
+			{
+				float4 vertex : POSITION;
+			};
 
-      // first pass (is executed before the second pass)
-      Pass {
-         Cull Front // cull only front faces
+			struct vertexOutput
+			{
+				float4 pos : SV_POSITION;
+				float4 posInObjectCoords : TEXCOORD0;
+			};
  
-         CGPROGRAM 
+			vertexOutput vert(vertexInput input)
+			{
+				vertexOutput output;
  
-         #pragma vertex vert  
-         #pragma fragment frag 
+				output.pos =  mul(UNITY_MATRIX_MVP, input.vertex);
+				output.posInObjectCoords = input.vertex; 
  
-         struct vertexInput {
-            float4 vertex : POSITION;
-         };
-         struct vertexOutput {
-            float4 pos : SV_POSITION;
-            float4 posInObjectCoords : TEXCOORD0;
-         };
+				return output;
+			}
  
-         vertexOutput vert(vertexInput input) 
-         {
-            vertexOutput output;
- 
-            output.pos =  mul(UNITY_MATRIX_MVP, input.vertex);
-            output.posInObjectCoords = input.vertex; 
- 
-            return output;
-         }
- 
-         float4 frag(vertexOutput input) : COLOR 
-         {
-            if (input.posInObjectCoords.y > 0.0) 
-            {
-               discard; // drop the fragment if y coordinate > 0
-            }
-            return float4(1.0, 0.0, 0.0, 1.0); // red
-         }
- 
-         ENDCG  
-      }
+			float4 frag(vertexOutput input) : COLOR
+			{
+				if (input.posInObjectCoords.y > 0.0) 
+				{
+					discard; // drop the fragment if y coordinate > 0
+				}
 
-      // second pass (is executed after the first pass)
-      Pass {
-         Cull Back // cull only back faces
+				return float4(1.0, 0.0, 0.0, 1.0); // red
+			}
+ 
+			ENDCG  
+		}
 
-         CGPROGRAM 
+		// second pass (is executed after the first pass)
+		Pass
+		{
+			Cull Back // cull only back faces
+
+			CGPROGRAM 
  
-         #pragma vertex vert  
-         #pragma fragment frag 
+			#pragma vertex vert
+			#pragma fragment frag 
+			
+			struct vertexInput
+			{
+				float4 vertex : POSITION;
+			};
+
+			struct vertexOutput
+			{
+				float4 pos : SV_POSITION;
+				float4 posInObjectCoords : TEXCOORD0;
+			};
+			
+			vertexOutput vert(vertexInput input) 
+			{
+				vertexOutput output;
  
-         struct vertexInput {
-            float4 vertex : POSITION;
-         };
-         struct vertexOutput {
-            float4 pos : SV_POSITION;
-            float4 posInObjectCoords : TEXCOORD0;
-         };
+				output.pos =  mul(UNITY_MATRIX_MVP, input.vertex);
+				output.posInObjectCoords = input.vertex; 
  
-         vertexOutput vert(vertexInput input) 
-         {
-            vertexOutput output;
+				return output;
+			}
+			
+			float4 frag(vertexOutput input) : COLOR 
+			{
+				if (input.posInObjectCoords.y > 0.0) 
+				{
+					discard; // drop the fragment if y coordinate > 0
+				}
+
+				return float4(0.0, 1.0, 0.0, 1.0); // green
+			}
  
-            output.pos =  mul(UNITY_MATRIX_MVP, input.vertex);
-            output.posInObjectCoords = input.vertex; 
- 
-            return output;
-         }
- 
-         float4 frag(vertexOutput input) : COLOR 
-         {
-            if (input.posInObjectCoords.y > 0.0) 
-            {
-               discard; // drop the fragment if y coordinate > 0
-            }
-            return float4(0.0, 1.0, 0.0, 1.0); // green
-         }
- 
-         ENDCG  
-      }
-	} 
+			ENDCG
+		}
+	}
+
 	FallBack "Diffuse"
 }

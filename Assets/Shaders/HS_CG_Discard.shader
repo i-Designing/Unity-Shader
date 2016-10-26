@@ -1,44 +1,52 @@
-﻿Shader "Custom/HS/HS_CG_Discard" {
-	SubShader {
-      Pass {
-         Cull Off // turn off triangle culling, alternatives are:
-         // Cull Back (or nothing): cull only back faces 
-         // Cull Front : cull only front faces
+﻿Shader "Custom/HS/HS_CG_Discard"
+{
+	SubShader
+	{
+		Pass
+		{
+			// turn off triangle culling, alternatives are:
+			Cull Off
+			//Cull Back (or nothing): cull only back faces 
+			//Cull Front : cull only front faces
  
-         CGPROGRAM 
+			CGPROGRAM 
  
-         #pragma vertex vert  
-         #pragma fragment frag 
+			#pragma vertex vert  
+			#pragma fragment frag 
  
-         struct vertexInput {
-            float4 vertex : POSITION;
-         };
-         struct vertexOutput {
-            float4 pos : SV_POSITION;
-            float4 posInObjectCoords : TEXCOORD0;
-         };
+			struct vertexInput
+			{
+				float4 vertex : POSITION;
+			};
+         
+			struct vertexOutput
+			{
+				float4 pos : SV_POSITION;
+				float4 posInObjectCoords : TEXCOORD0;
+			};
  
-         vertexOutput vert(vertexInput input) 
-         {
-            vertexOutput output;
+			vertexOutput vert(vertexInput input)
+			{
+				vertexOutput output;
  
-            output.pos =  mul(UNITY_MATRIX_MVP, input.vertex);
-            output.posInObjectCoords = input.vertex; 
+				output.pos =  mul(UNITY_MATRIX_MVP, input.vertex);
+				output.posInObjectCoords = input.vertex; 
  
-            return output;
-         }
+				return output;
+			}
+			
+			float4 frag(vertexOutput input) : COLOR 
+			{
+				if (input.posInObjectCoords.y > 0.0) 
+				{
+					discard; // drop the fragment if y coordinate > 0
+				}
+				return float4(0.0, 1.0, 0.0, 1.0); // green
+			}
  
-         float4 frag(vertexOutput input) : COLOR 
-         {
-            if (input.posInObjectCoords.y > 0.0) 
-            {
-               discard; // drop the fragment if y coordinate > 0
-            }
-            return float4(0.0, 1.0, 0.0, 1.0); // green
-         }
- 
-         ENDCG  
-      }
+			ENDCG
+		}
 	}
+
 	FallBack "Diffuse"
 }

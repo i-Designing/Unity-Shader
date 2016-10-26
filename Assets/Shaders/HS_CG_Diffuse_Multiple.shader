@@ -1,112 +1,130 @@
-﻿Shader "Custom/HS/HS_CG_Diffuse_Multiple" {
-   Properties {
-      _Color ("Diffuse Material Color", Color) = (1,1,1,1) 
-   }
-   SubShader {
-      Pass {	
-         Tags { "LightMode" = "ForwardBase" } 
-           // pass for first light source
+﻿Shader "Custom/HS/HS_CG_Diffuse_Multiple"
+{
+	Properties
+	{
+		_Color ("Diffuse Material Color", Color) = (1,1,1,1) 
+	}
+
+	SubShader
+	{
+		Pass
+		{
+			Tags { "LightMode" = "ForwardBase" } 
+			// make sure that all uniforms are correctly set
  
-         CGPROGRAM
+			CGPROGRAM
  
-         #pragma vertex vert  
-         #pragma fragment frag 
+			#pragma vertex vert  
+			#pragma fragment frag 
  
-         #include "UnityCG.cginc"
+			#include "UnityCG.cginc"
  
-         uniform float4 _LightColor0; 
-            // color of light source (from "Lighting.cginc")
+			uniform float4 _LightColor0; 
+			// color of light source (from "Lighting.cginc")
  
-         uniform float4 _Color; // define shader property for shaders
+			// define shader property for shaders
+			uniform float4 _Color;
  
-         struct vertexInput {
-            float4 vertex : POSITION;
-            float3 normal : NORMAL;
-         };
-         struct vertexOutput {
-            float4 pos : SV_POSITION;
-            float4 col : COLOR;
-         };
+			struct vertexInput
+			{
+				float4 vertex : POSITION;
+				float3 normal : NORMAL;
+			};
+
+			struct vertexOutput
+			{
+				float4 pos : SV_POSITION;
+				float4 col : COLOR;
+			};
+
+			vertexOutput vert(vertexInput input) 
+			{
+				vertexOutput output;
  
-         vertexOutput vert(vertexInput input) 
-         {
-            vertexOutput output;
+				float4x4 modelMatrix = _Object2World;
+				float4x4 modelMatrixInverse = _World2Object;
  
-            float4x4 modelMatrix = _Object2World;
-            float4x4 modelMatrixInverse = _World2Object; 
+				float3 normalDirection = normalize(
+					mul(float4(input.normal, 0.0), modelMatrixInverse).xyz);
+				float3 lightDirection = normalize(_WorldSpaceLightPos0.xyz);
  
-            float3 normalDirection = normalize(
-               mul(float4(input.normal, 0.0), modelMatrixInverse).xyz);
-            float3 lightDirection = normalize(_WorldSpaceLightPos0.xyz);
+				float3 diffuseReflection = _LightColor0.rgb * _Color.rgb
+					* max(0.0, dot(normalDirection, lightDirection));
  
-            float3 diffuseReflection = _LightColor0.rgb * _Color.rgb
-               * max(0.0, dot(normalDirection, lightDirection));
+				output.col = float4(diffuseReflection, 1.0);
+				output.pos = mul(UNITY_MATRIX_MVP, input.vertex);
+				
+				return output;
+			}
  
-            output.col = float4(diffuseReflection, 1.0);
-            output.pos = mul(UNITY_MATRIX_MVP, input.vertex);
-            return output;
-         }
+			float4 frag(vertexOutput input) : COLOR
+			{
+				return input.col;
+			}
+			
+			ENDCG
+		}
+		
+		Pass
+		{
+			// pass for additional light sources
+			Tags { "LightMode" = "ForwardAdd" } 
+            
+			Blend One One // additive blending
+
+			CGPROGRAM
  
-         float4 frag(vertexOutput input) : COLOR
-         {
-            return input.col;
-         }
+			#pragma vertex vert  
+			#pragma fragment frag 
  
-         ENDCG
-      }
+			#include "UnityCG.cginc"
  
-      Pass {	
-         Tags { "LightMode" = "ForwardAdd" } 
-            // pass for additional light sources
-         Blend One One // additive blending 
+			uniform float4 _LightColor0; 
+			// color of light source (from "Lighting.cginc")
  
-         CGPROGRAM
+			// define shader property for shaders
+			uniform float4 _Color;
  
-         #pragma vertex vert  
-         #pragma fragment frag 
+			struct vertexInput
+			{
+				float4 vertex : POSITION;
+				float3 normal : NORMAL;
+			};
+
+			struct vertexOutput
+			{
+				float4 pos : SV_POSITION;
+				float4 col : COLOR;
+			};
+
+			vertexOutput vert(vertexInput input) 
+			{
+				vertexOutput output;
  
-         #include "UnityCG.cginc"
+				float4x4 modelMatrix = _Object2World;
+				float4x4 modelMatrixInverse = _World2Object;
  
-         uniform float4 _LightColor0; 
-            // color of light source (from "Lighting.cginc")
+				float3 normalDirection = normalize(
+					mul(float4(input.normal, 0.0), modelMatrixInverse).xyz);
+				float3 lightDirection = normalize(_WorldSpaceLightPos0.xyz);
  
-         uniform float4 _Color; // define shader property for shaders
+				float3 diffuseReflection = _LightColor0.rgb * _Color.rgb
+					* max(0.0, dot(normalDirection, lightDirection));
  
-         struct vertexInput {
-            float4 vertex : POSITION;
-            float3 normal : NORMAL;
-         };
-         struct vertexOutput {
-            float4 pos : SV_POSITION;
-            float4 col : COLOR;
-         };
+				output.col = float4(diffuseReflection, 1.0);
+				output.pos = mul(UNITY_MATRIX_MVP, input.vertex);
+				
+				return output;
+			}
  
-         vertexOutput vert(vertexInput input) 
-         {
-            vertexOutput output;
- 
-            float4x4 modelMatrix = _Object2World;
-            float4x4 modelMatrixInverse = _World2Object; 
- 
-            float3 normalDirection = normalize(
-               mul(float4(input.normal, 0.0), modelMatrixInverse).xyz);
-            float3 lightDirection = normalize(_WorldSpaceLightPos0.xyz);
- 
-            float3 diffuseReflection = _LightColor0.rgb * _Color.rgb
-               * max(0.0, dot(normalDirection, lightDirection));
- 
-            output.col = float4(diffuseReflection, 1.0);
-            output.pos = mul(UNITY_MATRIX_MVP, input.vertex);
-            return output;
-         }
- 
-         float4 frag(vertexOutput input) : COLOR
-         {
-            return input.col;
-         }
- 
-         ENDCG
-      }
-   }
-   Fallback "Diffuse"
+			float4 frag(vertexOutput input) : COLOR
+			{
+				return input.col;
+			}
+			
+			ENDCG
+		}
+	}
+	
+	Fallback "Diffuse"
 }
