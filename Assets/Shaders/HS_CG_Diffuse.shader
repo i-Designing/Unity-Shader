@@ -44,12 +44,10 @@
 				float4x4 modelMatrix = _Object2World;
 				float4x4 modelMatrixInverse = _World2Object;
  
-				float3 normalDirection = normalize(
-					mul(float4(input.normal, 0.0), modelMatrixInverse).xyz);
+				float3 normalDirection = normalize( mul(float4(input.normal, 0.0), modelMatrixInverse).xyz );
 				float3 lightDirection = normalize(_WorldSpaceLightPos0.xyz);
  
-				float3 diffuseReflection = _LightColor0.rgb * _Color.rgb
-					* max(0.0, dot(normalDirection, lightDirection));
+				float3 diffuseReflection = _LightColor0.rgb * _Color.rgb * max(0.0, dot(normalDirection, lightDirection));
  
 				output.col = float4(diffuseReflection, 1.0);
 				output.pos = mul(UNITY_MATRIX_MVP, input.vertex);
