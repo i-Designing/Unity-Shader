@@ -42,4 +42,4 @@ Library/
 Network Trash Folder
 Temporary Items
 .apdisk
-*.meta
+#*.meta
