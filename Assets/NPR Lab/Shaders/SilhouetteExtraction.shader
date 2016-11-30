@@ -1,4 +1,7 @@
-﻿Shader "NPR/Silhouette Extraction" {
+﻿// Upgrade NOTE: replaced '_Object2World' with 'unity_ObjectToWorld'
+// Upgrade NOTE: replaced '_World2Object' with 'unity_WorldToObject'
+
+Shader "NPR/Silhouette Extraction" {
 	Properties {
 		_Color ("Color Tint", Color) = (1, 1, 1, 1)
 		_MainTex ("Base (RGB)", 2D) = "white" {}
@@ -97,8 +100,8 @@
 								
 				o.pos = mul( UNITY_MATRIX_MVP, v.vertex);
 				o.uv = TRANSFORM_TEX (v.texcoord, _MainTex);
-				o.worldNormal = mul(v.normal, _World2Object);
-				o.worldPos = mul(_Object2World, v.vertex).xyz;
+				o.worldNormal = mul(v.normal, unity_WorldToObject);
+				o.worldPos = mul(unity_ObjectToWorld, v.vertex).xyz;
 				
 				TRANSFER_SHADOW(o);
 				

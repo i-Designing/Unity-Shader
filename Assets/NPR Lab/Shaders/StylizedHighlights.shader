@@ -1,4 +1,6 @@
-﻿///
+﻿// Upgrade NOTE: replaced '_Object2World' with 'unity_ObjectToWorld'
+
+///
 ///  Reference: 	Anjyo K, Hiramitsu K. Stylized highlights for cartoon rendering and animation[J]. 
 ///						Computer Graphics and Applications, IEEE, 2003, 23(4): 54-61.
 /// 
@@ -93,7 +95,7 @@ Shader "NPR/Cartoon/Stylized Highlights" {
 				o.tangentViewDir = mul(rotation, ObjSpaceViewDir(v.vertex));
 				o.uv = TRANSFORM_TEX (v.texcoord, _MainTex);
 				
-				o.worldPos = mul(_Object2World, v.vertex).xyz;
+				o.worldPos = mul(unity_ObjectToWorld, v.vertex).xyz;
 				
 				TRANSFER_SHADOW(o);
 				
@@ -239,7 +241,7 @@ Shader "NPR/Cartoon/Stylized Highlights" {
 				o.tangentViewDir = mul(rotation, ObjSpaceViewDir(v.vertex));
 				o.uv = TRANSFORM_TEX (v.texcoord, _MainTex);
 				
-				o.worldPos = mul(_Object2World, v.vertex).xyz;
+				o.worldPos = mul(unity_ObjectToWorld, v.vertex).xyz;
 				
 				TRANSFER_SHADOW(o);
 				

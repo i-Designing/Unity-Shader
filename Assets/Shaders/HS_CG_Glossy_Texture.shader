@@ -1,4 +1,7 @@
-﻿Shader "Custom/HS/HS_CG_Glossy_Texture" {
+﻿// Upgrade NOTE: replaced '_Object2World' with 'unity_ObjectToWorld'
+// Upgrade NOTE: replaced '_World2Object' with 'unity_WorldToObject'
+
+Shader "Custom/HS/HS_CG_Glossy_Texture" {
 	Properties {
       _MainTex ("RGBA Texture For Material Color", 2D) = "white" {} 
       _Color ("Diffuse Material Color", Color) = (1,1,1,1) 
@@ -41,8 +44,8 @@
          {
             vertexOutput output;
  
-            float4x4 modelMatrix = _Object2World;
-            float4x4 modelMatrixInverse = _World2Object;
+            float4x4 modelMatrix = unity_ObjectToWorld;
+            float4x4 modelMatrixInverse = unity_WorldToObject;
  
             output.posWorld = mul(modelMatrix, input.vertex);
             output.normalDir = normalize(
@@ -145,8 +148,8 @@
          {
             vertexOutput output;
  
-            float4x4 modelMatrix = _Object2World;
-            float4x4 modelMatrixInverse = _World2Object;
+            float4x4 modelMatrix = unity_ObjectToWorld;
+            float4x4 modelMatrixInverse = unity_WorldToObject;
  
             output.posWorld = mul(modelMatrix, input.vertex);
             output.normalDir = normalize(

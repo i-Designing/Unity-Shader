@@ -1,13 +1,13 @@
 ﻿// Upgrade NOTE: replaced '_Object2World' with 'unity_ObjectToWorld'
 // Upgrade NOTE: replaced '_World2Object' with 'unity_WorldToObject'
 
-Shader "Custom/HS/HS_CG_Lighting"
+Shader "Custom/HS/HS_CG_Lighting_PBS"
 {
 	Properties
 	{
 		_Tint ("Tint", Color) = (1,1,1,1)
 		_MainTex ("Texture", 2D) = "white" {}
-		_Specular ("Specular", Color) = (1,1,1,1)
+		_Metallic ("Metallic", Range(0, 1)) = 0
 		_Smoothness ("Smoothness", Range(0, 1)) = 0.5
 	}
 
@@ -20,11 +20,13 @@ Shader "Custom/HS/HS_CG_Lighting"
 			}
 			CGPROGRAM
 
+			#pragma target 3.0
 			#pragma vertex MyVetexProgram
 			#pragma fragment MyFragmentProgram
 
 			//#include "UnityCG.cginc"
-			#include "UnityStandardBRDF.cginc"
+			//#include "UnityStandardBRDF.cginc"
+			#include "UnityPBSLighting.cginc"
 			
 			// vertex shader outputs("vertex to fragment")
 			struct Interpolators
@@ -46,7 +48,7 @@ Shader "Custom/HS/HS_CG_Lighting"
 			float4 _Tint;
 			sampler2D _MainTex;
 			float4 _MainTex_ST;
-			float4 _Specular;
+			float _Metallic;
 			float _Smoothness;
 
 			Interpolators MyVetexProgram(VertexData v)
@@ -87,12 +89,26 @@ Shader "Custom/HS/HS_CG_Lighting"
 				float3 lightColor = _LightColor0.rgb;
 				float3 albedo = tex2D(_MainTex, i.uv).rgb * _Tint.rgb;
 
-				float3 halfVector = normalize(lightDir + i.normal);
-				float3 specular = pow(DotClamped(halfVector, reflectionDir),_Smoothness * 100) * _Specular.rgb;				
-				float3 diffuse = albedo * lightColor * DotClamped(lightDir, i.normal);
+				float3 specularTint;
+				float oneMinusReflectivity;
+				albedo = DiffuseAndSpecularFromMetallic(
+					albedo, _Metallic, specularTint, oneMinusReflectivity
+				);
 
-				//finally, add diffuse and specular together
-				return float4(diffuse + specular, 1);
+				UnityLight light;
+				light.color = lightColor;
+				light.dir = lightDir;
+				light.ndotl = DotClamped(i.normal, lightDir);
+				UnityIndirect indirectLight;
+				indirectLight.diffuse = 0;
+				indirectLight.specular = 0;
+
+				return UNITY_BRDF_PBS(
+					albedo, specularTint,
+					oneMinusReflectivity, _Smoothness,
+					i.normal, viewDir,
+					light, indirectLight
+				);
 			}
 
 			ENDCG

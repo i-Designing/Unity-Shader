@@ -1,4 +1,6 @@
-﻿Shader "Custom/HS/PlaneShadow"
+﻿// Upgrade NOTE: replaced '_Object2World' with 'unity_ObjectToWorld'
+
+Shader "Custom/HS/PlaneShadow"
 {
     Properties
     {
@@ -44,7 +46,7 @@
               
             float4 vert(appdata_base v) : POSITION
             {
-                float4 posW = mul(_Object2World, v.vertex);
+                float4 posW = mul(unity_ObjectToWorld, v.vertex);
                 float4 posWS = mul(worldToShadow, posW);
                 return mul (UNITY_MATRIX_VP, posWS);
             }

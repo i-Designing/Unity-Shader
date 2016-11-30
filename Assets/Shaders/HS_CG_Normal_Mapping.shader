@@ -1,4 +1,7 @@
-﻿Shader "Custom/HS/HS_CG_Normal_Mapping" {
+﻿// Upgrade NOTE: replaced '_Object2World' with 'unity_ObjectToWorld'
+// Upgrade NOTE: replaced '_World2Object' with 'unity_WorldToObject'
+
+Shader "Custom/HS/HS_CG_Normal_Mapping" {
 	Properties {
       _BumpMap ("Normal Map", 2D) = "bump" {}
       _Color ("Diffuse Material Color", Color) = (1,1,1,1) 
@@ -39,8 +42,8 @@
       {
          vertexOutput output;
 
-         float4x4 modelMatrix = _Object2World;
-         float4x4 modelMatrixInverse = _World2Object; 
+         float4x4 modelMatrix = unity_ObjectToWorld;
+         float4x4 modelMatrixInverse = unity_WorldToObject; 
 
          output.tangentWorld = normalize(
             mul(modelMatrix, float4(input.tangent.xyz, 0.0)).xyz);

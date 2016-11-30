@@ -1,4 +1,6 @@
-﻿Shader "NPR/Wireframe" {
+﻿// Upgrade NOTE: replaced '_Object2World' with 'unity_ObjectToWorld'
+
+Shader "NPR/Wireframe" {
 	Properties {
 		_Color ("Color Tint", Color) = (1, 1, 1, 1)
 		_WireColor ("Wire Color", Color) = (0, 0, 0, 1)
@@ -42,7 +44,7 @@
     			v2g o;
     			o.pos = mul(UNITY_MATRIX_MVP, v.vertex);
     			o.uv = v.texcoord;
-    			o.worldPos = mul(_Object2World, v.vertex);
+    			o.worldPos = mul(unity_ObjectToWorld, v.vertex);
     			return o;
 			}
 			

@@ -1,4 +1,7 @@
-﻿///
+﻿// Upgrade NOTE: replaced '_Object2World' with 'unity_ObjectToWorld'
+// Upgrade NOTE: replaced '_World2Object' with 'unity_WorldToObject'
+
+///
 ///  Reference: 	Lake A, Marshall C, Harris M, et al. Stylized rendering techniques for scalable real-time 3D animation[C]
 ///						Proceedings of the 1st international symposium on Non-photorealistic animation and rendering. ACM, 2000: 13-20.
 ///
@@ -69,9 +72,9 @@ Shader "NPR/Pencil Sketch/Pencil Sketch Shading" {
 				v2f o;
 				
 				o.pos = mul( UNITY_MATRIX_MVP, v.vertex);
-				o.worldNormal  = mul(v.normal, (float3x3)_World2Object);
+				o.worldNormal  = mul(v.normal, (float3x3)unity_WorldToObject);
 				o.worldLightDir = WorldSpaceLightDir(v.vertex);
-				o.worldPos = mul(_Object2World, v.vertex).xyz;
+				o.worldPos = mul(unity_ObjectToWorld, v.vertex).xyz;
 				o.scrPos = ComputeScreenPos(o.pos);
 				
 				TRANSFER_SHADOW(o);
@@ -160,9 +163,9 @@ Shader "NPR/Pencil Sketch/Pencil Sketch Shading" {
 				v2f o;
 				
 				o.pos = mul( UNITY_MATRIX_MVP, v.vertex);
-				o.worldNormal  = mul(v.normal, (float3x3)_World2Object);
+				o.worldNormal  = mul(v.normal, (float3x3)unity_WorldToObject);
 				o.worldLightDir = WorldSpaceLightDir(v.vertex);
-				o.worldPos = mul(_Object2World, v.vertex).xyz;
+				o.worldPos = mul(unity_ObjectToWorld, v.vertex).xyz;
 				o.scrPos = ComputeScreenPos(o.pos);
 				
 				TRANSFER_SHADOW(o);

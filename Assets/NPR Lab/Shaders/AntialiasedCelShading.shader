@@ -1,4 +1,7 @@
-﻿///
+﻿// Upgrade NOTE: replaced '_Object2World' with 'unity_ObjectToWorld'
+// Upgrade NOTE: replaced '_World2Object' with 'unity_WorldToObject'
+
+///
 ///  Reference: http://prideout.net/blog/?p=22
 /// 
 Shader "NPR/Cartoon/Antialiased Cel Shading" {
@@ -100,8 +103,8 @@ Shader "NPR/Cartoon/Antialiased Cel Shading" {
 				v2f o;
 				
 				o.pos = mul( UNITY_MATRIX_MVP, v.vertex); 
-				o.worldNormal  = mul(v.normal, (float3x3)_World2Object);
-				o.worldPos = mul(_Object2World, v.vertex).xyz;
+				o.worldNormal  = mul(v.normal, (float3x3)unity_WorldToObject);
+				o.worldPos = mul(unity_ObjectToWorld, v.vertex).xyz;
 				o.uv = TRANSFORM_TEX (v.texcoord, _MainTex);
 				
 				TRANSFER_SHADOW(o);
@@ -200,8 +203,8 @@ Shader "NPR/Cartoon/Antialiased Cel Shading" {
 				v2f o;
 			
 				o.pos = mul( UNITY_MATRIX_MVP, v.vertex); 
-				o.worldNormal  = mul(v.normal, (float3x3)_World2Object);
-				o.worldPos = mul(_Object2World, v.vertex).xyz;
+				o.worldNormal  = mul(v.normal, (float3x3)unity_WorldToObject);
+				o.worldPos = mul(unity_ObjectToWorld, v.vertex).xyz;
 				o.uv = TRANSFORM_TEX (v.texcoord, _MainTex);
 				
 				TRANSFER_SHADOW(o);

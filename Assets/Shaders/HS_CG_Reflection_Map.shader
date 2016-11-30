@@ -1,4 +1,7 @@
-﻿Shader "Custom/HS/HS_CG_Reflection_Map" {
+﻿// Upgrade NOTE: replaced '_Object2World' with 'unity_ObjectToWorld'
+// Upgrade NOTE: replaced '_World2Object' with 'unity_WorldToObject'
+
+Shader "Custom/HS/HS_CG_Reflection_Map" {
 	Properties {
       _Cube("Reflection Map", Cube) = "" {}
     }
@@ -28,8 +31,8 @@
          {
             vertexOutput output;
  
-            float4x4 modelMatrix = _Object2World;
-            float4x4 modelMatrixInverse = _World2Object; 
+            float4x4 modelMatrix = unity_ObjectToWorld;
+            float4x4 modelMatrixInverse = unity_WorldToObject; 
  
             output.viewDir = mul(modelMatrix, input.vertex).xyz 
                - _WorldSpaceCameraPos;
