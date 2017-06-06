@@ -1,64 +1,60 @@
 ﻿// Upgrade NOTE: replaced '_World2Object' with 'unity_WorldToObject'
-Shader "Custom/HS/Cartoon/HS_CG_Outline"
+Shader "Custom/HS/Cartoon/HS_CG_Outline1"
 {
 	//属性  
 	Properties{
 		_Diffuse("Diffuse", Color) = (1,1,1,1)
 		_OutlineCol("OutlineCol", Color) = (1,0,0,1)
-		_Outline("Thick of Outline",range(0,0.1)) = 0.02 //挤出描边的粗细
-		_Factor("Factor",range(0,0.5)) = 0.25 //挤出多远
+		_OutlineFactor("OutlineFactor", Range(0,0.1)) = 0.01
 		_MainTex("Base 2D", 2D) = "white"{}
 	}
 
 	//子着色器    
 	SubShader
 	{
-		//挤出操作在第一个pass中进行
-		pass
+
+		//描边使用两个Pass，第一个pass沿法线挤出一点，只输出描边的颜色  
+		Pass
 		{
-			// Always 不应用光照
-			Tags{ "LightMode" = "Always" }
-			//裁剪了物体的前面（对着相机的），把背面挤出
+			//剔除正面，只渲染背面，对于大多数模型适用，不过如果需要背面的，就有问题了  
 			Cull Front
-			//像素的深度写入深度缓冲，如果关闭的话，物体与物体交叠处将不会被描边，因为此处无z值后渲染的物体会把此处挤出的描边“盖住”
-			ZWrite On
 
 			CGPROGRAM
-			#pragma vertex vert
-			#pragma fragment frag
-			#include "UnityCG.cginc"
-			float4 _OutlineCol;
-			float _Outline;
-			float _Factor;
+			#include "UnityCG.cginc"  
+			fixed4 _OutlineCol;
+			float _OutlineFactor;
+
+			//使用vert函数和frag函数  
+			#pragma vertex vert  
+			#pragma fragment frag  
+
 			struct v2f
 			{
-				float4 pos:SV_POSITION;
+				float4 pos : SV_POSITION;
 			};
 
 			v2f vert(appdata_full v)
 			{
 				v2f o;
-				//计算该点位置朝向
-				float3 dir = normalize(v.vertex.xyz);
-				//计算法线方向
-				//float3 dir2 = v.normal;
-				float3 dir2 = v.tangent.xyz;
-				//计算该点位置朝向和法线方向的点积，通过正负值可以确定是指向还是背离几何中心的，正为背离，负为指向
-				float D = dot(dir,dir2);
-				//乘上正负值，真正的方向值
-				dir = dir*sign(D);
-				//把该点位置朝向与法线方向按外部变量_Factor的比重混合，来控制挤出多远
-				dir = dir*_Factor + dir2*(1 - _Factor);
-				//把物体背面的点向外挤出
-				v.vertex.xyz += dir*_Outline;
-				o.pos = mul(UNITY_MATRIX_MVP,v.vertex);
+				//在vertex阶段，每个顶点按照法线的方向偏移一部分，不过这种会造成近大远小的透视问题  
+				//v.vertex.xyz += v.normal * _OutlineFactor;  
+				o.pos = mul(UNITY_MATRIX_MVP, v.vertex);
+				//将法线方向转换到视空间
+				//float3 normal = v.normal;
+				//Tangent for Normals
+				float3 normal = v.tangent.xyz;
+				float3 vnormal = mul((float3x3)UNITY_MATRIX_IT_MV, normal);
+				//将视空间法线xy坐标转化到投影空间，只有xy需要，z深度不需要了  
+				float2 offset = TransformViewToProjection(vnormal.xy);
+				//在最终投影阶段输出进行偏移操作  
+				o.pos.xy += offset * _OutlineFactor;
 				return o;
 			}
 
-			float4 frag(v2f i) : COLOR
+			fixed4 frag(v2f i) : SV_Target
 			{
-				float4 c = _OutlineCol / 5;
-				return c;
+				//这个Pass直接输出描边颜色  
+				return _OutlineCol;
 			}
 			ENDCG
 		}
@@ -75,6 +71,10 @@ Shader "Custom/HS/Cartoon/HS_CG_Outline"
 			sampler2D _MainTex;
 			//使用了TRANSFROM_TEX宏就需要定义XXX_ST  
 			float4 _MainTex_ST;
+
+			//使用vert函数和frag函数  
+			#pragma vertex vert  
+			#pragma fragment frag 
 
 			//定义结构体：vertex shader阶段输出的内容  
 			struct v2f
@@ -112,11 +112,7 @@ Shader "Custom/HS/Cartoon/HS_CG_Outline"
 				fixed4 color = tex2D(_MainTex, i.uv);
 				color.rgb = color.rgb* diffuse;
 				return fixed4(color);
-			}
-
-			//使用vert函数和frag函数  
-			#pragma vertex vert  
-			#pragma fragment frag     
+			}			    
 
 			ENDCG
 		}
@@ -125,4 +121,3 @@ Shader "Custom/HS/Cartoon/HS_CG_Outline"
 	//前面的Shader失效的话，使用默认的Diffuse  
 	FallBack "Diffuse"
 }
-
