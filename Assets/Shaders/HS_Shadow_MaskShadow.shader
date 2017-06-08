@@ -1,4 +1,4 @@
-﻿Shader "Custom/HS/MaskShadow" 
+﻿Shader "Custom/HS/CG_MaskShadow" 
 {
     Properties 
     {
