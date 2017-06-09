@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-namespace ShaderUtility
+namespace ShaderEffectUtility
 {
     /// <summary>
     /// Initializes and Updates the plane shadow material if neccessary.

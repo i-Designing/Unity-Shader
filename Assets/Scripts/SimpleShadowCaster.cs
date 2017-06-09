@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-namespace ShaderUtility
+namespace ShaderEffectUtility
 {
     public class SimpleShadowCaster : MonoBehaviour
     {

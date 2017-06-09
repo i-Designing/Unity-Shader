@@ -1,7 +1,7 @@
 ﻿// Upgrade NOTE: replaced '_Object2World' with 'unity_ObjectToWorld'
 // Upgrade NOTE: replaced '_World2Object' with 'unity_WorldToObject'
 
-Shader "Custom/HS/HS_CG_SimpleShadow"
+Shader "Custom/HS/Shadow/SimpleShadow"
 {
 	//物体本身  
     Properties{  

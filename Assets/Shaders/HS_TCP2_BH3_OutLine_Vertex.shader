@@ -36,7 +36,9 @@ Shader "Custom/HS/Cartoon/HS_TCP2_BH3_OutLine_Vertex"
 		
 		//Z Offset
 		_Offset1 ("#OUTLINEZ# Z Offset 1", Float) = 0
-		_Offset2 ("#OUTLINEZ# Z Offset 2", Float) = 0		
+		_Offset2 ("#OUTLINEZ# Z Offset 2", Float) = 0
+
+		_TangentNormal("#OUTLINEZ# Tangent Normal", Float) = 0
 	}
 	
 	SubShader
@@ -55,6 +57,7 @@ Shader "Custom/HS/Cartoon/HS_TCP2_BH3_OutLine_Vertex"
 			fixed4 _OutlineColor;
 			float _Outline;
 			float _ZSmooth;
+			float _TangentNormal;
 
 			//使用vert函数和frag函数  
 			#pragma vertex vert  
@@ -68,8 +71,15 @@ Shader "Custom/HS/Cartoon/HS_TCP2_BH3_OutLine_Vertex"
 			v2f vert(appdata_full v)
 			{
 				v2f o;
+				float3 normal;
 				float4 pos = mul( UNITY_MATRIX_MV, v.vertex);
-				float3 normal = mul( (float3x3)UNITY_MATRIX_IT_MV, v.normal);
+
+				// use original normal or tangent smoothed normal
+				if(_TangentNormal == 0)
+					normal = mul( (float3x3)UNITY_MATRIX_IT_MV, v.normal);
+				else
+					normal = mul((float3x3)UNITY_MATRIX_IT_MV, v.tangent.xyz);
+
 				normal.z = -_ZSmooth;
 
 				float width =  _Outline * 0.01 * (1.0 - v.color.b);

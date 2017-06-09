@@ -1,4 +1,4 @@
-﻿Shader "Custom/HS/Cartoon/HS_Surf_SimpleToon" {
+﻿Shader "Custom/HS/Cartoon/SimpleToon" {
 	Properties {
 		_MainTex ("Albedo (RGB)", 2D) = "white" {}
 		_Bump ("Bump", 2D) = "bump" {}

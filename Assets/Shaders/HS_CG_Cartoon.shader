@@ -1,4 +1,4 @@
-﻿Shader "Custom/HS/Cartoon/HS_CG_Cartoon" {
+﻿Shader "Custom/HS/Cartoon/Cartoon" {
 	Properties 
 	{
 		_Color("Main Color",color)=(1,1,1,1)//物体的颜色
